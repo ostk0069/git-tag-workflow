@@ -1,0 +1,58 @@
+version: 2.1
+
+executors:
+  macos:
+    macos:
+      xcode: 13.2.1
+    shell: /bin/bash --login -eo pipefail
+
+jobs:
+  echo_run_a:
+    executor: macos
+    steps:
+      - run:
+          name: ECHO
+          command: |
+            echo "a"
+
+  echo_run_b:
+    executor: macos
+    steps:
+      - run:
+          name: ECHO
+          command: |
+            echo "b"
+  
+  echo_run_c:
+    executor: macos
+    steps:
+      - run:
+          name: ECHO
+          command: |
+            echo "c"
+workflows:
+  release:
+    jobs:
+      - echo_run_a:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+\.[0-9]+\.[0-9]-*$/
+      - echo_run_b:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+\.[0-9]+\.[0-9]-*$/
+          requires:
+            - echo_run_a
+      - echo_run_c:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+\.[0-9]+\.[0-9]-*$/
+          requires:
+            - echo_run_b
+
