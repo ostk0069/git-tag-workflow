@@ -1,35 +1,36 @@
 version: 2.1
 
-executors:
-  macos:
-    macos:
-      xcode: 13.2.1
-    shell: /bin/bash --login -eo pipefail
-
 jobs:
-  echo_run_a:
-    executor: macos
-    steps:
-      - run:
-          name: ECHO
-          command: |
-            echo "a"
+  docker:
+      - image: cimg/base:stable
+  steps:
+    - run:
+        name: ECHO
+        command: "echo A"
 
   echo_run_b:
-    executor: macos
+    docker:
+      - image: cimg/base:stable
     steps:
       - run:
           name: ECHO
-          command: |
-            echo "b"
+          command: "echo B"
   
   echo_run_c:
-    executor: macos
+    docker:
+      - image: cimg/base:stable
     steps:
       - run:
           name: ECHO
-          command: |
-            echo "c"
+          command: "echo C"
+
+  say-hello:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          command: "echo Hello, World!"
 workflows:
   release:
     jobs:
