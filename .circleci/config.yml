@@ -48,13 +48,13 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^[0-9]+\.[0-9]+\.[0-9]-*$/
+              only: /^[0-9]+\.[0-9]+\.[0-9]*$/
       - echo_run_b:
           filters:
             branches:
               ignore: /.*/
             tags:
-              only: /^[0-9]+\.[0-9]+\.[0-9]-*$/
+              only: /^[0-9]+\.[0-9]+\.[0-9]*$/
           requires:
             - echo_run_a
       - echo_run_c:
@@ -62,7 +62,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^[0-9]+\.[0-9]+\.[0-9]-*$/
+              only: /^[0-9]+\.[0-9]+\.[0-9]*$/
           requires:
             - echo_run_b
 
