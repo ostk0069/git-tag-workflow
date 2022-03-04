@@ -1,17 +1,20 @@
 version: 2.1
 
 jobs:
-  docker:
+  echo_run_a:
+    docker:
       - image: cimg/base:stable
-  steps:
-    - run:
-        name: ECHO
-        command: "echo A"
+    steps:
+      - checkout
+      - run:
+          name: ECHO
+          command: "echo A"
 
   echo_run_b:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - run:
           name: ECHO
           command: "echo B"
@@ -20,6 +23,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - run:
           name: ECHO
           command: "echo C"
@@ -31,7 +35,12 @@ jobs:
       - checkout
       - run:
           command: "echo Hello, World!"
+
 workflows:
+  say-hello-workflow:
+      jobs:
+        - say-hello
+
   release:
     jobs:
       - echo_run_a:
