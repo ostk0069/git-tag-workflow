@@ -20,8 +20,8 @@ jobs:
           if [[ $CURRENT_VERSION =~ $VERSION_REGEX ]]; then
             BUILD_NAME="${BASH_REMATCH[1]}"
             BUILD_NUMBER="${BASH_REMATCH[2]}"
+            echo "CLOSE_MILESTONE=${BUILD_NAME}" >> $GITHUB_ENV
           fi
-          echo "CLOSE_MILESTONE=${BUILD_NAME}" >> $GITHUB_ENV
       - name: Close Current Milestone
         uses: Beakyn/gha-close-milestone@v1.1.1
         env:
@@ -37,9 +37,9 @@ jobs:
           if [[ $CURRENT_VERSION =~ $VERSION_REGEX ]]; then
             VERSION_MAJOR=${BASH_REMATCH[1]}
             VERSION_MINOR=${BASH_REMATCH[2]}
+            MILESTONE="$VERSION_MAJOR.$((VERSION_MINOR + 2)).0"
+            echo "CREATE_MILESTONE=${MILESTONE}" >> $GITHUB_ENV
           fi
-          MILESTONE="$VERSION_MAJOR.$((VERSION_MINOR + 2)).0"
-          echo "CREATE_MILESTONE=${MILESTONE}" >> $GITHUB_ENV
       - name: Create New Milestone
         uses: WyriHaximus/github-action-create-milestone@v1
         with:
