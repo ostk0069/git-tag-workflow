@@ -15,10 +15,8 @@ jobs:
       - name: Set Milestone to Close
         run: |
           CURRENT_VERSION=$(cat .app-version)
-          VERSION_MAJOR=`echo $CURRENT_VERSION | cut -d. -f1`
-          VERSION_MINOR=`echo $CURRENT_VERSION | cut -d. -f2`
-          MILESTONE="$VERSION_MAJOR.$((VERSION_MINOR - 1)).0"
-          echo "CLOSE_MILESTONE=${MILESTONE}" >> $GITHUB_ENV
+          BUILD_NAME=`echo $CURRENT_VERSION | sed -e 's/\([0-9\.]*\)-\(.*\)/\1/g'`
+          echo "CLOSE_MILESTONE=${BUILD_NAME}" >> $GITHUB_ENV
       - name: Close Current Milestone
         uses: Beakyn/gha-close-milestone@v1.1.1
         env:
