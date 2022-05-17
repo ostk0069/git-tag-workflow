@@ -14,6 +14,6 @@ jobs:
       name: Publish GitHub Release
       with:
         generateReleaseNotes: true
-        token: ${{ secrets.BOT_PAT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
       env:
-        GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
