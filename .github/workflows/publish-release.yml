@@ -10,6 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
+    
+    # 同じversion名ですでにリリースが作成されている場合は昔のものを消去する
+    - name: Remove Github Release if needed
+      run: |
+        CURRENT_TAG=$(cat .app-version)
+        PREV_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1  --max-count=1`)
+        VERSION_REGEX="([0-9]+\.){1}[0-9]+(\.[0-9]+)?"
+
+        CURRENT_VERSION=`echo $CURRENT_TAG | grep -o -E $VERSION_REGEX | head -n1`
+        PREV_VERSION=`echo $PREV_TAG | grep -o -E $VERSION_REGEX | head -n1`
+
+        if [ "$CURRENT_VERSION" = "$PREV_VERSION" ]; then
+          git push origin --delete $PREV_TAG
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+    
     - uses: ncipollo/release-action@v1
       name: Publish GitHub Release
       with:
