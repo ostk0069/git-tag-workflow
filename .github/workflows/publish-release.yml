@@ -17,16 +17,25 @@ jobs:
       run: |
         CURRENT_TAG=$(cat .app-version)
         PREV_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1  --max-count=1`)
+        echo 'DELETE_TAG=$PREV_TAG' >> $GITHUB_ENV
         VERSION_REGEX="([0-9]+\.){1}[0-9]+(\.[0-9]+)?"
 
         CURRENT_VERSION=`echo $CURRENT_TAG | grep -o -E $VERSION_REGEX | head -n1`
         PREV_VERSION=`echo $PREV_TAG | grep -o -E $VERSION_REGEX | head -n1`
 
         if [ "$CURRENT_VERSION" = "$PREV_VERSION" ]; then
-          git push origin --delete $PREV_TAG
+          echo 'DELETE=true' >> $GITHUB_ENV
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+        
+    - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      if: startsWith(env.DELETE, 'true')
+      with:
+        delete_release: true
+        tag_name: env.DELETE_TAG
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - uses: ncipollo/release-action@v1
       name: Publish GitHub Release
