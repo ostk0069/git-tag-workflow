@@ -33,7 +33,7 @@ jobs:
       if: startsWith(env.DELETE, 'true')
       with:
         delete_release: true
-        tag_name: env.DELETE_TAG
+        tag_name: ${{ env.DELETE_TAG }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
