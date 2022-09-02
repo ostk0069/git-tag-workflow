@@ -17,7 +17,7 @@ jobs:
       run: |
         CURRENT_TAG=$(cat .app-version)
         PREV_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1  --max-count=1`)
-        echo 'DELETE_TAG=${PREV_TAG}' >> $GITHUB_ENV
+        echo "DELETE_TAG=${PREV_TAG}" >> $GITHUB_ENV
         VERSION_REGEX="([0-9]+\.){1}[0-9]+(\.[0-9]+)?"
 
         CURRENT_VERSION=`echo $CURRENT_TAG | grep -o -E $VERSION_REGEX | head -n1`
