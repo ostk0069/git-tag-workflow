@@ -30,7 +30,7 @@ jobs:
           echo 'DELETE=true' >> $GITHUB_ENV
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - uses: dev-drprasad/delete-tag-and-release@v0.2.0
       if: startsWith(env.DELETE, 'true')
