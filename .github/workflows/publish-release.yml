@@ -10,20 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
-    - name: 'Get Previous tag'
-      uses: "WyriHaximus/github-action-get-previous-tag@v1"
         
     # 同じversion名ですでにリリースが作成されている場合は昔のものを消去する
     - name: Remove Github Release if needed
       run: |
         CURRENT_TAG=$(cat .app-version)
-        PREV_TAG=$(git describe --abbrev=0 --tags $CURRENT_TAG^)
-        echo "DELETE_TAG=${PREV_TAG}" >> $GITHUB_ENV
+        
+        # 一つ前のTagを取得しているはずなのに最新が取得される不具合がある
+        PREV_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1  --max-count=1`)
+        PREV_TAG_SECOND=$(git describe --abbrev=0 --tags $PREV_TAG^)
+        
+        echo "DELETE_TAG=${PREV_TAG_SECOND}" >> $GITHUB_ENV
         VERSION_REGEX="([0-9]+\.){1}[0-9]+(\.[0-9]+)?"
 
         CURRENT_VERSION=`echo $CURRENT_TAG | grep -o -E $VERSION_REGEX | head -n1`
-        PREV_VERSION=`echo $PREV_TAG | grep -o -E $VERSION_REGEX | head -n1`
+        PREV_VERSION=`echo $PREV_TAG_SECOND | grep -o -E $VERSION_REGEX | head -n1`
 
         if [ "$CURRENT_VERSION" = "$PREV_VERSION" ]; then
           echo 'DELETE=true' >> $GITHUB_ENV
