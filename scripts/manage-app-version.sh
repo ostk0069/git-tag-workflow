@@ -105,11 +105,10 @@ fi
 git commit -m "[ota] release: bump app version to $UPDATING_VERSION"
 git push origin --no-verify $BRANCH_NAME
 
-set -- "$@" --body-file scripts/release-pr-body.md
-set -- "$@" --title "release: bump app version to $UPDATING_VERSION"
-set -- "$@" --head $BRANCH_NAME
-set -- "$@" --repo "ostk0069/git-tag-workflow"
-
-gh pr create "$@"
+gh pr create \
+  --body-file scripts/release-pr-body.md \
+  --title "release: bump app version to $UPDATING_VERSION" \
+  --head $BRANCH_NAME \
+  --repo "ostk0069/git-tag-workflow"
 
 exit 0
