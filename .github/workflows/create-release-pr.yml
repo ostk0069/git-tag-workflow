@@ -2,7 +2,7 @@ name: Create Release Pull Request
 
 on:
   push
-  #  schedule:
+  # schedule:
   # https://crontab.guru/#0_0_*_*_4
   # 毎週木曜9時に実行(UTC/協定世界時)
   #    - cron: "0 0 * * 4"
