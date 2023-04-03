@@ -74,8 +74,11 @@ fi
 DEFAULT_BRANCH="main"
 BRANCH_NAME="release-$UPDATING_VERSION"
 
-git checkout $DEFAULT_BRANCH
-git pull origin $DEFAULT_BRANCH
+if [ $# != 1 ]; then
+  git checkout $DEFAULT_BRANCH
+  git pull origin $DEFAULT_BRANCH
+fi
+
 git checkout -b $BRANCH_NAME
 
 # .app-version を今回リリースするversionに書き換える
