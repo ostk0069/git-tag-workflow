@@ -1,0 +1,18 @@
+name: Update Release branch
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  update-release-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wechuli/pull-request-updater@f974a6ea46a513758a23a07c9a4d42c63603fadb # v2.0.0
+        with:
+          base: main
+          head: release-*
+          create-comments: false
