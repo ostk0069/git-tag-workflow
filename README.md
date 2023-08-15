@@ -1,3 +1,3 @@
 # git-tag-workflow
 
-Playground for CI workflows
+Playground for CI workflows by @ostk0069
