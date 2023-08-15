@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# local環境で実行する場合:
+# $ ./scripts/manage-app-version.sh
+#
+# 自分で(major|minor|patch|build)を選択し、PRの作成をすることができる
+#
+# $ ./scripts/manage-app-version.sh patch-hotfix
+#
+# Hotfix用裏コマンド。最新のリリースタグからbranchを生やす。
+#
+# CI上で実行する場合:
+# $ ./scripts/manage-app-version.sh (major|minor|patch|build)
+#
+# 引数に指定したversionのupdateが行われる
+
 if ! type "gh" > /dev/null 2>&1; then
     errorLog "gh not found. please install with `brew install gh` & auth with `gh auth login`"
     exit 1
@@ -64,6 +78,7 @@ else
     "minor" ) UPDATING_VERSION=$UPDATED_MINOR ;;
     "patch" ) UPDATING_VERSION=$UPDATED_PATCH ;;
     "build" ) UPDATING_VERSION=$UPDATED_BUILD ;;
+    "patch-hotfix" ) UPDATING_VERSION=$UPDATED_BUILD ;;
     * ) echo "$1 は不適切です。major、minor、patch、build のいずれかを入力してください" exit 1 ;;
   esac
 
@@ -74,8 +89,18 @@ fi
 DEFAULT_BRANCH="main"
 BRANCH_NAME="release-$UPDATING_VERSION"
 
-git checkout $DEFAULT_BRANCH
-git pull origin $DEFAULT_BRANCH
+if [ $# != 1 ] && [ "$1" == 'patch-hotfix' ]; then
+  DEFAULT_BRANCH=$CURRENT_VERSION
+  BRANCH_NAME="hotfix-$UPDATING_VERSION"
+fi
+
+if [ $# != 1 ]; then
+  git checkout $DEFAULT_BRANCH
+  git pull origin $DEFAULT_BRANCH
+else
+  echo "UPDATING_VERSION=$UPDATING_VERSION" >> $GITHUB_ENV
+fi
+
 git checkout -b $BRANCH_NAME
 
 # .app-version を今回リリースするversionに書き換える
@@ -102,11 +127,16 @@ fi
 git commit -m "[ota] release: bump app version to $UPDATING_VERSION"
 git push origin --no-verify $BRANCH_NAME
 
-set -- "$@" --body-file scripts/release-pr-body.md
-set -- "$@" --title "release: bump app version to $UPDATING_VERSION"
-set -- "$@" --head $BRANCH_NAME
-set -- "$@" --repo "ostk0069/git-tag-workflow"
+BODY_FILE_PATH="scripts/pr-body-templates/release-pr-body.md"
 
-gh pr create "$@"
+if [ $# != 1 ] && [ "$1" == 'patch-hotfix' ]; then
+  BODY_FILE_PATH="scripts/pr-body-templates/hotfix-pr-body.md"
+fi
+
+gh pr create \
+  --body-file $BODY_FILE_PATH \
+  --title "release: bump app version to $UPDATING_VERSION" \
+  --head $BRANCH_NAME \
+  --repo "WinTicket/app"
 
 exit 0
