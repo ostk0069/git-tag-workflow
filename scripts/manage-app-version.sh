@@ -129,14 +129,16 @@ git commit -m "[ota] release: bump app version to $UPDATING_VERSION"
 git push origin --no-verify $BRANCH_NAME
 
 BODY_FILE_PATH="scripts/pr-body-templates/release-pr-body.md"
+PR_TITLE="release: bump app version to $UPDATING_VERSION"
 
-if [ $# != 1 ] && [ "$1" == 'patch-hotfix' ]; then
+if [ $# == 1 ] && [ "$1" == 'patch-hotfix' ]; then
   BODY_FILE_PATH="scripts/pr-body-templates/hotfix-pr-body.md"
+  PR_TITLE="hotfix: bump app version to $UPDATING_VERSION"
 fi
 
 gh pr create \
   --body-file $BODY_FILE_PATH \
-  --title "release: bump app version to $UPDATING_VERSION" \
+  --title $PR_TITLE \
   --head $BRANCH_NAME \
   --repo "ostk0069/git-tag-workflow"
 
