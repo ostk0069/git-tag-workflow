@@ -1,20 +1,20 @@
-name: Create Release Pull Request
+# name: Create Release Pull Request
 
-on:
-  push
-  #  schedule:
-  # https://crontab.guru/#0_0_*_*_4
-  # 毎週木曜9時に実行(UTC/協定世界時)
-  #    - cron: "0 0 * * 4"
+# on:
+#   push
+#   #  schedule:
+#   # https://crontab.guru/#0_0_*_*_4
+#   # 毎週木曜9時に実行(UTC/協定世界時)
+#   #    - cron: "0 0 * * 4"
 
-jobs:
-  create-release-pr:
-    runs-on: ubuntu-latest
+# jobs:
+#   create-release-pr:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - name: Create Pull Request
-        run: ./scripts/manage-app-version.sh minor
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Create Pull Request
+#         run: ./scripts/manage-app-version.sh minor
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
