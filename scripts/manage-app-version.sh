@@ -137,9 +137,9 @@ if [ $# == 1 ] && [ "$1" == 'patch-hotfix' ]; then
 fi
 
 gh pr create \
-  --body-file $BODY_FILE_PATH \
-  --title $PR_TITLE \
-  --head $BRANCH_NAME \
+  --body-file "$BODY_FILE_PATH" \
+  --title "$PR_TITLE" \
+  --head "$BRANCH_NAME" \
   --repo "ostk0069/git-tag-workflow"
 
 exit 0
