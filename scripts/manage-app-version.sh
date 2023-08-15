@@ -137,6 +137,6 @@ gh pr create \
   --body-file $BODY_FILE_PATH \
   --title "release: bump app version to $UPDATING_VERSION" \
   --head $BRANCH_NAME \
-  --repo "WinTicket/app"
+  --repo "ostk0069/git-tag-workflow"
 
 exit 0
