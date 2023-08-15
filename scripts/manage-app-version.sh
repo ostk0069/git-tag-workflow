@@ -78,8 +78,8 @@ else
     "minor" ) UPDATING_VERSION=$UPDATED_MINOR ;;
     "patch" ) UPDATING_VERSION=$UPDATED_PATCH ;;
     "build" ) UPDATING_VERSION=$UPDATED_BUILD ;;
-    "patch-hotfix" ) UPDATING_VERSION=$UPDATED_BUILD ;;
-    * ) echo "$1 は不適切です。major、minor、patch、build のいずれかを入力してください" exit 1 ;;
+    "patch-hotfix" ) UPDATING_VERSION=$UPDATED_PATCH ;;
+    * ) echo "$1 は不適切です。major、minor、patch、build、patch-hotfix のいずれかを入力してください" exit 1 ;;
   esac
 
   git config --local user.email "github-actions@users.noreply.github.com"
@@ -89,12 +89,13 @@ fi
 DEFAULT_BRANCH="main"
 BRANCH_NAME="release-$UPDATING_VERSION"
 
-if [ $# != 1 ] && [ "$1" == 'patch-hotfix' ]; then
+if [ $# == 1 ] && [ "$1" == 'patch-hotfix' ]; then
   DEFAULT_BRANCH=$CURRENT_VERSION
   BRANCH_NAME="hotfix-$UPDATING_VERSION"
 fi
 
-if [ $# != 1 ]; then
+# patch-hotfixだけ手元でのみ実行を想定している
+if [ $# != 1 ] || [ "$1" == 'patch-hotfix' ]; then
   git checkout $DEFAULT_BRANCH
   git pull origin $DEFAULT_BRANCH
 else
